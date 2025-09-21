@@ -88,7 +88,7 @@ class ProfilePage extends StatelessWidget {
                   InkWell(
                     onTap: () {
                       Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => ScanPage()));
+                          MaterialPageRoute(builder: (context) => NewScanScreen()));
                     },
                     child: Center(
                       child: Text('My Profile',
