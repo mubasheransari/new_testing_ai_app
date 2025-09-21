@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../../Bloc/global_bloc.dart';
 
 /// Shared hint color used across widgets
 const _hint = Color(0xFF8E8E93);
@@ -351,6 +352,7 @@ class _BmiPageState extends State<BmiPage> {
                               fontWeight: FontWeight.w700, fontSize: 16)),
                       const SizedBox(height: 8),
                       _NumberField(
+                        initialValue: '35',
                         controller: _ageCtrl,
                         unit: 'years',
                         onStep: (d) => _step(_ageCtrl, d,
@@ -414,6 +416,7 @@ class _BmiPageState extends State<BmiPage> {
                       const SizedBox(height: 8),
                       if (_hUnit == HeightUnit.cm)
                         _NumberField(
+                          initialValue: '8090',
                           controller: _cmCtrl,
                           unit: 'cm',
                           onStep: (d) => _step(_cmCtrl, d,
@@ -472,12 +475,14 @@ class _BmiPageState extends State<BmiPage> {
                       const SizedBox(height: 8),
                       if (_wUnit == WeightUnit.kg)
                         _NumberField(
+                          initialValue: '000008888',
                           controller: _kgCtrl,
                           unit: 'kg',
                           onStep: (d) => _step(_kgCtrl, d, min: 10, max: 350),
                         )
                       else
                         _NumberField(
+                          initialValue: '112244',
                           controller: _lbCtrl,
                           unit: 'lb',
                           onStep: (d) => _step(_lbCtrl, d, min: 22, max: 770),
@@ -503,8 +508,9 @@ class _BmiPageState extends State<BmiPage> {
                       ),
                       TextButton(
                         onPressed: _reset,
-                        child:
-                            const Text('Reset', style: TextStyle(color: _hint)),
+                        child: Text(
+                            'Reset', //${context.read<GlobalBloc>().state.loginModel!.bmi.last.age}
+                            style: TextStyle(color: _hint)),
                       ),
                     ],
                   ),
@@ -641,16 +647,40 @@ class _Segmented<T> extends StatelessWidget {
   }
 }
 
-class _NumberField extends StatelessWidget {
+class _NumberField extends StatefulWidget {
   final TextEditingController controller;
   final String unit;
   final void Function(double delta) onStep;
+
+  /// NEW: set an initial number once (only if controller.text is empty)
+  final String? initialValue;
+
+  /// OPTIONAL: format decimals (e.g., 0 → ints, 1/2 → 1 or 2 decimals)
+  final int fractionDigits;
 
   const _NumberField({
     required this.controller,
     required this.unit,
     required this.onStep,
+    required this.initialValue,
+    this.fractionDigits = 0,
+    super.key,
   });
+
+  @override
+  State<_NumberField> createState() => _NumberFieldState();
+}
+
+class _NumberFieldState extends State<_NumberField> {
+  @override
+  void initState() {
+    super.initState();
+    if ((widget.controller.text).trim().isEmpty &&
+        widget.initialValue != null) {
+      final digits = widget.fractionDigits.clamp(0, 6);
+      widget.controller.text = widget.initialValue!;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -664,12 +694,13 @@ class _NumberField extends StatelessWidget {
       child: Row(
         children: [
           IconButton(
-              icon: const Icon(Icons.remove_circle_outline),
-              onPressed: () => onStep(-1),
-              splashRadius: 22),
+            icon: const Icon(Icons.remove_circle_outline),
+            onPressed: () => widget.onStep(-1),
+            splashRadius: 22,
+          ),
           Expanded(
             child: TextField(
-              controller: controller,
+              controller: widget.controller,
               keyboardType:
                   const TextInputType.numberWithOptions(decimal: true),
               textAlign: TextAlign.center,
@@ -677,21 +708,74 @@ class _NumberField extends StatelessWidget {
                 border: InputBorder.none,
                 hintText: '0',
                 hintStyle: const TextStyle(color: _hint),
-                suffixText: unit,
+                suffixText: widget.unit,
                 suffixStyle:
                     const TextStyle(color: _hint, fontWeight: FontWeight.w600),
               ),
             ),
           ),
           IconButton(
-              icon: const Icon(Icons.add_circle_outline),
-              onPressed: () => onStep(1),
-              splashRadius: 22),
+            icon: const Icon(Icons.add_circle_outline),
+            onPressed: () => widget.onStep(1),
+            splashRadius: 22,
+          ),
         ],
       ),
     );
   }
 }
+
+// class _NumberField extends StatelessWidget {
+//   final TextEditingController controller;
+//   final String unit;
+//   final void Function(double delta) onStep;
+
+//   const _NumberField({
+//     required this.controller,
+//     required this.unit,
+//     required this.onStep,
+//   });
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Container(
+//       height: 52,
+//       decoration: BoxDecoration(
+//         color: const Color(0xFFF5F5F7),
+//         borderRadius: BorderRadius.circular(14),
+//         border: Border.all(color: const Color(0xFFE6E6E6)),
+//       ),
+//       child: Row(
+//         children: [
+//           IconButton(
+//               icon: const Icon(Icons.remove_circle_outline),
+//               onPressed: () => onStep(-1),
+//               splashRadius: 22),
+//           Expanded(
+//             child: TextField(
+//               controller: controller,
+//               keyboardType:
+//                   const TextInputType.numberWithOptions(decimal: true),
+//               textAlign: TextAlign.center,
+//               decoration: InputDecoration(
+//                 border: InputBorder.none,
+//                 hintText: '0',
+//                 hintStyle: const TextStyle(color: _hint),
+//                 suffixText: unit,
+//                 suffixStyle:
+//                     const TextStyle(color: _hint, fontWeight: FontWeight.w600),
+//               ),
+//             ),
+//           ),
+//           IconButton(
+//               icon: const Icon(Icons.add_circle_outline),
+//               onPressed: () => onStep(1),
+//               splashRadius: 22),
+//         ],
+//       ),
+//     );
+//   }
+// }
 
 class _MiniNumberField extends StatelessWidget {
   final String label;
