@@ -475,6 +475,9 @@ class _BmiPageState extends State<BmiPage> {
                       const SizedBox(height: 8),
                       if (_wUnit == WeightUnit.kg)
                         _NumberField(
+                          onChanged: (v){
+                          
+                          },
                           initialValue: '000008888',
                           controller: _kgCtrl,
                           unit: 'kg',
@@ -658,12 +661,16 @@ class _NumberField extends StatefulWidget {
   /// OPTIONAL: format decimals (e.g., 0 → ints, 1/2 → 1 or 2 decimals)
   final int fractionDigits;
 
+  /// NEW: onChanged callback (when text changes)
+  final void Function(String value)? onChanged;
+
   const _NumberField({
     required this.controller,
     required this.unit,
     required this.onStep,
     required this.initialValue,
     this.fractionDigits = 0,
+    this.onChanged,
     super.key,
   });
 
@@ -701,8 +708,7 @@ class _NumberFieldState extends State<_NumberField> {
           Expanded(
             child: TextField(
               controller: widget.controller,
-              keyboardType:
-                  const TextInputType.numberWithOptions(decimal: true),
+              keyboardType: const TextInputType.numberWithOptions(decimal: true),
               textAlign: TextAlign.center,
               decoration: InputDecoration(
                 border: InputBorder.none,
@@ -712,6 +718,7 @@ class _NumberFieldState extends State<_NumberField> {
                 suffixStyle:
                     const TextStyle(color: _hint, fontWeight: FontWeight.w600),
               ),
+              onChanged: widget.onChanged, // 👈 added callback
             ),
           ),
           IconButton(
@@ -724,6 +731,7 @@ class _NumberFieldState extends State<_NumberField> {
     );
   }
 }
+
 
 // class _NumberField extends StatelessWidget {
 //   final TextEditingController controller;
