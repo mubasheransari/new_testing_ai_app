@@ -94,8 +94,8 @@ class _MyAppState extends State<MyApp> {
               ),
             ),
             themeMode: state.themeMode,
-            home:
-                token != null ? RootTabs() : NewSplashScreen() //SplashScreen(),
+            home:NewSplashScreen() 
+               // token != null ? RootTabs() : NewSplashScreen() //SplashScreen(),
             );
       },
     );

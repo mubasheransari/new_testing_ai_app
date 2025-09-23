@@ -28,7 +28,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     _OnbData(
       title: 'Easily Track Your\nDaily Activity',
       asset: 'assets/ob3.png',
-      underline: true,
+      //  underline: true,
     ),
   ];
 

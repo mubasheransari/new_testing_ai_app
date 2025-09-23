@@ -1,8 +1,8 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-
-import 'login_screen.dart';
+import 'package:get_storage/get_storage.dart';
+import 'package:motives_tneww/screens/new_screens/home_screen.dart';
 import 'onboarding_screen.dart';
 
 class NewSplashScreen extends StatefulWidget {
@@ -24,12 +24,23 @@ class _NewSplashScreenState extends State<NewSplashScreen>
 
   @override
   void initState() {
+    var box = GetStorage();
+    String? token = box.read('auth_token');
+    print("Token: $token");
     Timer(const Duration(seconds: 3), () {
-      Navigator.pushAndRemoveUntil(
-        context,
-        MaterialPageRoute(builder: (context) => OnboardingScreen()),
-        (route) => false,
-      );
+      if (token != null) {
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (context) => RootTabs()),
+          (route) => false,
+        );
+      } else {
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (context) => OnboardingScreen()),
+          (route) => false,
+        );
+      }
     });
     super.initState();
   }

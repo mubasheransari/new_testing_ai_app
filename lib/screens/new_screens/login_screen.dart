@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:motives_tneww/screens/new_screens/home_screen.dart';
 import 'package:motives_tneww/screens/new_screens/signup_screen.dart';
 import 'package:motives_tneww/widget/toast_widget.dart';
@@ -7,6 +8,8 @@ import '../../Bloc/global_bloc.dart';
 import '../../Bloc/global_event.dart';
 import '../../Bloc/global_state.dart';
 import 'forget_password.dart';
+
+var storage = GetStorage();
 
 class NewLoginScreen extends StatefulWidget {
   const NewLoginScreen({super.key});
