@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:motives_tneww/widget/toast_widget.dart';
 
+import '../../Repository/repository.dart';
 import 'otp_verification.dart';
 
 class NewForgotPasswordScreen extends StatefulWidget {
@@ -98,15 +100,40 @@ class _NewForgotPasswordScreenState extends State<NewForgotPasswordScreen> {
                         borderRadius: BorderRadius.circular(16),
                       ),
                     ),
-                    onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) =>
-                                  NewOtpVerificationScreen()));
-                      // if (_formKey.currentState!.validate()) {
-                      //   // TODO: call your reset-password API
-                      // }
+                    onPressed: () async {
+                      if (!_formKey.currentState!.validate()) return;
+
+                      final repo = Repository(); // direct use, no Bloc
+                      try {
+                        final res = await repo
+                            .requestPasswordResetHttp(_email.text.trim());
+                        if (res.status) {
+                          toastWidget("Email has been send to ${_email.text}",
+                              Colors.red);
+                          // print("response of forget password ${res.message}");
+                          // ScaffoldMessenger.of(context).showSnackBar(
+                          //   SnackBar(content: Text(res.message)),
+                          // );
+                          // Navigator.push(
+                          //   context,
+                          //   MaterialPageRoute(
+                          //       builder: (_) =>
+                          //           const NewOtpVerificationScreen()),
+                          // );
+                        } else {
+                          toastWidget("Internal Server Error", Colors.red);
+                          // ScaffoldMessenger.of(context).showSnackBar(
+                          //   SnackBar(
+                          //       content: Text(res.message.isEmpty
+                          //           ? 'Request failed'
+                          //           : res.message)),
+                          // );
+                        }
+                      } catch (e) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text(e.toString())),
+                        );
+                      }
                     },
                     child: const Text('Continue',
                         style: TextStyle(

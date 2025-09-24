@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:motives_tneww/Model/signup_model.dart';
 import 'package:http/http.dart' as http;
 import '../Model/login_model.dart';
+import '../Model/reset_password_model.dart';
 
 class Repository {
   final String loginUrl = "https://doctorsipe.com/retina/api/login";
@@ -84,6 +85,29 @@ class Repository {
       return UserResponse.fromJson(jsonDecode(response.body));
     } else {
       throw Exception("Failed to create user: ${response.body}");
+    }
+  }
+
+  Future<ResetPasswordResponse> requestPasswordResetHttp(String email) async {
+    final uri = Uri.parse('https://doctorsipe.com/api/restore-password');
+    final r = await http.post(
+      uri,
+      headers: {
+        'Accept': 'application/json',
+      },
+      body: {'email': email},
+    );
+
+    if (r.statusCode == 200) {
+      final map = jsonDecode(r.body) as Map<String, dynamic>;
+      return ResetPasswordResponse.fromJson(map);
+    } else {
+      try {
+        final map = jsonDecode(r.body) as Map<String, dynamic>;
+        throw Exception(map['message'] ?? 'Request failed (${r.statusCode})');
+      } catch (_) {
+        throw Exception('Request failed (${r.statusCode})');
+      }
     }
   }
 }
