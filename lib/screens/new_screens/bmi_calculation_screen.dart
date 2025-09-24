@@ -9,6 +9,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../Bloc/global_bloc.dart';
+import '../../Repository/bmi_repository.dart';
 
 const _hint = Color(0xFF8E8E93);
 
@@ -121,7 +122,6 @@ class _BmiPageState extends State<BmiPage> {
     } else if (anyWeight != null && anyWeight.trim().isNotEmpty) {
       _applyWeight(anyWeight);
     }
-
     setState(() {});
     _savePrefs();
   }
@@ -342,7 +342,7 @@ class _BmiPageState extends State<BmiPage> {
   }
 
   // ---------- CALC (only updates when button pressed) ----------
-  void _calculate() {
+  void _calculate() async {
     final age = int.tryParse(_ageCtrl.text.trim()) ?? 0;
     final cm = _cmFromCurrent();
     final kg = _kgFromCurrent();
@@ -372,6 +372,14 @@ class _BmiPageState extends State<BmiPage> {
       _catColor = col;
       // Local BMI now overrides any API BMI in the UI.
     });
+    await BmiRepository().createBmi(
+      age: int.parse(_ageCtrl.text.trim()),
+      height: 1.75,
+      weight: 88,
+      ft: 5,
+      inches: 11,
+      result: 35, // will be sent as "35"
+    );
 
     _savePrefs();
   }

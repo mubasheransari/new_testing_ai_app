@@ -19,6 +19,7 @@ class _RootTabsState extends State<RootTabs> {
   final _pages = const [
     BmiPage(),
     CaloriesPage(),
+    NewScanScreen(),
     // PlaceholderPage(title: 'Home'),
     //PlaceholderPage(title: 'Diet Plan'),
     // PlaceholderPage(title: 'Store'),
@@ -43,8 +44,8 @@ class _RootTabsState extends State<RootTabs> {
               icon: Icon(Icons.health_and_safety), label: 'Calories'),
           // BottomNavigationBarItem(
           //     icon: Icon(Icons.storefront_outlined), label: 'Store'),
-          // BottomNavigationBarItem(
-          //     icon: Icon(Icons.stacked_bar_chart_outlined), label: 'Report'),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.qr_code_scanner), label: 'Scan Juice'),
           BottomNavigationBarItem(
               icon: Icon(Icons.person_outline), label: 'Profile'),
           BottomNavigationBarItem(
@@ -87,8 +88,10 @@ class ProfilePage extends StatelessWidget {
                   // Title
                   InkWell(
                     onTap: () {
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => NewScanScreen()));
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => NewScanScreen()));
                     },
                     child: Center(
                       child: Text('My Profile',
