@@ -1,4 +1,7 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:motives_tneww/Bloc/global_bloc.dart';
 import 'package:motives_tneww/Model/login_model.dart';
 import 'package:motives_tneww/screens/new_screens/appointment_screen.dart';
@@ -6,6 +9,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../scan/scan_screen.dart';
 import 'bmi_calculation_screen.dart';
 import 'calories_Calulation_screen.dart';
+import 'login_screen.dart';
 
 class RootTabs extends StatefulWidget {
   const RootTabs({super.key});
@@ -20,10 +24,6 @@ class _RootTabsState extends State<RootTabs> {
     BmiPage(),
     CaloriesPage(),
     NewScanScreen(),
-    // PlaceholderPage(title: 'Home'),
-    //PlaceholderPage(title: 'Diet Plan'),
-    // PlaceholderPage(title: 'Store'),
-    // PlaceholderPage(title: 'Report'),
     ProfilePage(),
     AppointmentBookingPage()
   ];
@@ -34,7 +34,23 @@ class _RootTabsState extends State<RootTabs> {
       body: _pages[_index],
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _index,
-        onTap: (i) => setState(() => _index = i),
+        onTap: (i) async {
+          if (i == 5) {
+            // Logout item
+            final ok = await showLogoutDialog(context); // use your dialog
+            if (ok == true) {
+              // context.read<GlobalBloc>().add(Logout()); // optional
+              Navigator.of(context).pushAndRemoveUntil(
+                MaterialPageRoute(builder: (_) => const NewLoginScreen()),
+                (_) => false,
+              );
+            }
+            return; // don't change _index
+          }
+          setState(() => _index = i);
+        },
+
+        // onTap: (i) => setState(() => _index = i),
         type: BottomNavigationBarType.fixed,
         selectedItemColor: const Color(0xFFFF7A3D),
         unselectedItemColor: const Color(0xFFB4B4B4),
@@ -50,6 +66,8 @@ class _RootTabsState extends State<RootTabs> {
               icon: Icon(Icons.person_outline), label: 'Profile'),
           BottomNavigationBarItem(
               icon: Icon(Icons.book_online), label: 'Appointment'),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.logout_rounded), label: 'Logout'),
         ],
       ),
     );
@@ -437,4 +455,171 @@ class PlaceholderPage extends StatelessWidget {
       ),
     );
   }
+}
+
+Future<bool?> showLogoutDialog(BuildContext context) {
+  return showGeneralDialog<bool>(
+    context: context,
+    barrierLabel: 'Logout',
+    barrierDismissible: true,
+    barrierColor: Colors.black54,
+    transitionDuration: const Duration(milliseconds: 250),
+    pageBuilder: (_, __, ___) => const SizedBox.shrink(),
+    transitionBuilder: (context, anim, __, ___) {
+      final curved = CurvedAnimation(parent: anim, curve: Curves.easeOutBack);
+      return SafeArea(
+        child: Center(
+          child: ScaleTransition(
+            scale: curved,
+            child: Opacity(
+              opacity: anim.value,
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(24),
+                child: BackdropFilter(
+                  filter: ImageFilter.blur(sigmaX: 14, sigmaY: 14),
+                  child: Material(
+                    color: Colors.transparent,
+                    child: Container(
+                      constraints: const BoxConstraints(maxWidth: 360),
+                      padding: const EdgeInsets.fromLTRB(20, 20, 20, 12),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(24),
+                        gradient: LinearGradient(
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                          colors: [
+                            Colors.white.withOpacity(0.12),
+                            Colors.white.withOpacity(0.06),
+                          ],
+                        ),
+                        border: Border.all(
+                          color: Colors.white.withOpacity(0.18),
+                          width: 1.2,
+                        ),
+                        boxShadow: const [
+                          BoxShadow(
+                            color: Color(0x33000000),
+                            blurRadius: 24,
+                            offset: Offset(0, 10),
+                          ),
+                        ],
+                      ),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          // Icon badge
+                          Container(
+                            width: 64,
+                            height: 64,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              gradient: LinearGradient(
+                                colors: [
+                                  const Color(0xFFFF7A7A),
+                                  const Color(0xFFE53935),
+                                ],
+                              ),
+                              boxShadow: const [
+                                BoxShadow(
+                                  color: Color(0x33E53935),
+                                  blurRadius: 8,
+                                  offset: Offset(0, 8),
+                                ),
+                              ],
+                            ),
+                            child: const Icon(Icons.logout_rounded,
+                                color: Colors.white, size: 34),
+                          ),
+                          const SizedBox(height: 16),
+                          Text(
+                            'Log out?',
+                            style: Theme.of(context)
+                                .textTheme
+                                .headlineSmall
+                                ?.copyWith(
+                                  fontWeight: FontWeight.w700,
+                                  color:
+                                      Theme.of(context).colorScheme.onSurface,
+                                ),
+                            textAlign: TextAlign.center,
+                          ),
+                          const SizedBox(height: 8),
+                          Text(
+                            'You can always sign back in. Are you sure you want to end your session now?',
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyMedium
+                                ?.copyWith(color: Colors.white),
+                            textAlign: TextAlign.center,
+                          ),
+                          const SizedBox(height: 20),
+                          Row(
+                            children: [
+                              Expanded(
+                                child: OutlinedButton(
+                                  style: OutlinedButton.styleFrom(
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 14),
+                                    side: BorderSide(color: Colors.white),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(14),
+                                    ),
+                                  ),
+                                  onPressed: () =>
+                                      Navigator.of(context).pop(false),
+                                  child: const Text(
+                                    'Cancel',
+                                    style: TextStyle(color: Colors.white),
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(width: 12),
+                              Expanded(
+                                child: ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 14),
+                                    backgroundColor: Colors.redAccent,
+                                    foregroundColor: Colors.white,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(14),
+                                    ),
+                                    elevation: 0,
+                                  ),
+                                  onPressed: () {
+                                    var box = GetStorage();
+                                    box.remove('email');
+                                    box.remove('password');
+                                    box.remove('auth_token');
+
+                                    Navigator.of(context).pushAndRemoveUntil(
+                                      MaterialPageRoute(
+                                          builder: (_) =>
+                                              const NewLoginScreen()),
+                                      (Route<dynamic> route) =>
+                                          false, // remove everything
+                                    );
+                                  },
+                                  child: const Text(
+                                    'Log out',
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.w700),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 4),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
+    },
+  );
 }

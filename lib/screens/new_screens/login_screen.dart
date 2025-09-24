@@ -9,7 +9,7 @@ import '../../Bloc/global_event.dart';
 import '../../Bloc/global_state.dart';
 import 'forget_password.dart';
 
-var storage = GetStorage();
+var box = GetStorage();
 
 class NewLoginScreen extends StatefulWidget {
   const NewLoginScreen({super.key});
@@ -84,13 +84,11 @@ class _NewLoginScreenState extends State<NewLoginScreen> {
                 ],
               ),
               const SizedBox(height: 28),
-              // Email
               const Text('Email',
                   style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
               const SizedBox(height: 8),
               TextFormField(
                 controller: emailController,
-                //  initialValue: 'Jacob_jones4@gmail.com',
                 keyboardType: TextInputType.emailAddress,
                 decoration: InputDecoration(
                     isDense: true,
@@ -104,14 +102,11 @@ class _NewLoginScreenState extends State<NewLoginScreen> {
                     hintText: 'Jacob_jones4@gmail.com'),
               ),
               const SizedBox(height: 18),
-              // Password
               const Text('Password',
                   style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
               const SizedBox(height: 8),
               TextFormField(
                 controller: passwordController,
-                //   initialValue: '********',
-
                 obscureText: obscure,
                 decoration: InputDecoration(
                   hintText: '********',
@@ -130,17 +125,8 @@ class _NewLoginScreenState extends State<NewLoginScreen> {
                 ),
               ),
               const SizedBox(height: 14),
-              // Remember & Forgot
               Row(
                 children: [
-                  // Checkbox(
-                  //   value: rememberMe,
-                  //   onChanged: (v) => setState(() => rememberMe = v ?? false),
-                  //   activeColor: accent,
-                  //   materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                  //   visualDensity: VisualDensity.compact,
-                  // ),
-                  // const Text('Remember Me'),
                   const Spacer(),
                   TextButton(
                     onPressed: () {
@@ -157,20 +143,22 @@ class _NewLoginScreenState extends State<NewLoginScreen> {
                   ),
                 ],
               ),
-
               const SizedBox(height: 22),
-              // Login button
               BlocConsumer<GlobalBloc, GlobalState>(
                 listener: (context, state) {
                   if (state.loginStatus == LoginStatus.success) {
-                    // Focus.of(context).unfocus();
+                    box.write('email', emailController.text.trim());
+                    box.write('password', passwordController.text.trim());
                     toastWidget('Login Successfully!', Colors.green);
-                    //  Focus.of(context).unfocus();
 
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => RootTabs()));
+                    Navigator.of(context).pushAndRemoveUntil(
+                      MaterialPageRoute(builder: (_) => const RootTabs()),
+                      (Route<dynamic> route) => false, // remove everything
+                    );
+
+                    // Navigator.push(context,
+                    //     MaterialPageRoute(builder: (context) => RootTabs()));
                   } else if (state.loginStatus == LoginStatus.failure) {
-                    //    Focus.of(context).unfocus();
                     toastWidget('Login failed! Please try again.', Colors.red);
                   }
                 },
@@ -194,7 +182,6 @@ class _NewLoginScreenState extends State<NewLoginScreen> {
                                   password: passwordController.text.trim(),
                                 ),
                               );
-                          Focus.of(context).unfocus();
                         },
                         child: state.loginStatus == LoginStatus.loading
                             ? Center(
@@ -212,9 +199,7 @@ class _NewLoginScreenState extends State<NewLoginScreen> {
                   );
                 },
               ),
-
               const SizedBox(height: 22),
-              // Register
               Center(
                 child: InkWell(
                   onTap: () {
