@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter/material.dart';
 import 'package:motives_tneww/Model/signup_model.dart';
 import 'package:http/http.dart' as http;
 import '../Model/login_model.dart';
@@ -18,8 +19,13 @@ class Repository {
         },
       );
 
+    debugPrint("LOGIN DATA DEBUG PRINT ${response.body}");
+
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
+        debugPrint("LOGIN DATA DEBUG PRINT Testing@123 $data");
+        debugPrint("LOGIN DATA DEBUG PRINT $data");
+        debugPrint("LOGIN DATA DEBUG PRINT $data");
         return LoginModel.fromJson(data);
       } else {
         throw Exception(
