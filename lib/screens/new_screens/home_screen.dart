@@ -6,6 +6,8 @@ import 'package:motives_tneww/Bloc/global_bloc.dart';
 import 'package:motives_tneww/Model/login_model.dart';
 import 'package:motives_tneww/screens/new_screens/appointment_screen.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:motives_tneww/screens/new_screens/doctors_screen.dart';
+import 'package:motives_tneww/screens/new_screens/professional_profiles_screen.dart';
 import '../scan/scan_screen.dart';
 import 'bmi_calculation_screen.dart';
 import 'calories_Calulation_screen.dart';
@@ -25,7 +27,7 @@ class _RootTabsState extends State<RootTabs> {
     CaloriesPage(),
     NewScanScreen(),
     ProfilePage(),
-    AppointmentBookingPage()
+ DoctorHomeScreen() //ProfessionalProfilesScreen() // AppointmentBookingPage()
   ];
 
   @override

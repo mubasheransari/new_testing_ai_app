@@ -18,6 +18,7 @@ class LoginModel {
   final List<Bmi> bmi;
   final List<Reward> rewards;
   final List<Calorie> calories;
+  List<Professional> professionals;
 
   LoginModel({
     required this.accessToken,
@@ -29,6 +30,7 @@ class LoginModel {
     required this.bmi,
     required this.rewards,
     required this.calories,
+    required this.professionals,
   });
 
   factory LoginModel.fromJson(Map<String, dynamic> json) => LoginModel(
@@ -53,6 +55,7 @@ class LoginModel {
             .whereType<Map<String, dynamic>>()
             .map((e) => Calorie.fromJson(e))
             .toList(),
+            professionals: List<Professional>.from(json["professionals"].map((x) => Professional.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
@@ -65,7 +68,40 @@ class LoginModel {
         "bmi": bmi.map((x) => x.toJson()).toList(),
         "rewards": rewards.map((x) => x.toJson()).toList(),
         "calories": calories.map((x) => x.toJson()).toList(),
+         "professionals": List<dynamic>.from(professionals.map((x) => x.toJson())),
       };
+}
+
+class Professional {
+    int id;
+    String name;
+    String email;
+    int customerType;
+    int isApproved;
+
+    Professional({
+        required this.id,
+        required this.name,
+        required this.email,
+        required this.customerType,
+        required this.isApproved,
+    });
+
+    factory Professional.fromJson(Map<String, dynamic> json) => Professional(
+        id: json["id"],
+        name: json["name"],
+        email: json["email"],
+        customerType: json["customerType"],
+        isApproved: json["isApproved"],
+    );
+
+    Map<String, dynamic> toJson() => {
+        "id": id,
+        "name": name,
+        "email": email,
+        "customerType": customerType,
+        "isApproved": isApproved,
+    };
 }
 
 class User {

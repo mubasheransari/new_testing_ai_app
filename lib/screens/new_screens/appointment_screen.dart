@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get_storage/get_storage.dart';
+import 'package:motives_tneww/Repository/appointments_repository.dart';
 
 import 'appoinment_list.dart';
 import 'appointment_notification.dart';
@@ -38,7 +40,8 @@ class _Card extends StatelessWidget {
 
 /// ====== BOOKING PAGE (upper design same as BMI) ======
 class AppointmentBookingPage extends StatefulWidget {
-  const AppointmentBookingPage({super.key});
+  String doctorName;
+   AppointmentBookingPage({super.key,required this.doctorName});
 
   @override
   State<AppointmentBookingPage> createState() => _AppointmentBookingPageState();
@@ -98,13 +101,17 @@ class _AppointmentBookingPageState extends State<AppointmentBookingPage> {
     }
     final a = Appointment(
       patientName: _patientCtrl.text.trim(),
-      doctorName: _doctorCtrl.text.trim(),
+      doctorName:widget.doctorName,
       country: _countryCtrl.text.trim(),
       date: _date!,
       notes: _notesCtrl.text.trim(),
     );
     await AppointmentStore.I.add(a);
-    Focus.of(context).unfocus();
+
+
+                                     final box = GetStorage();
+    String? token = box.read('auth_token');
+                                AppointmentsRepo().createAppointment(jwtToken: token!, patientName: _patientCtrl.text, doctorName: widget.doctorName, appointmentDate: _date!.toString());
 
     ScaffoldMessenger.of(context)
         .showSnackBar(const SnackBar(content: Text('Appointment saved')));
@@ -252,10 +259,10 @@ class _AppointmentBookingPageState extends State<AppointmentBookingPage> {
                           _filledField(_patientCtrl, 'John Doe',
                               validator: _req),
                           const SizedBox(height: 14),
-                          _label('Doctor Name'),
-                          const SizedBox(height: 8),
-                          _filledField(_doctorCtrl, 'Dr. Smith',
-                              validator: _req),
+                          // _label('Doctor Name'),
+                          // const SizedBox(height: 8),
+                          // _filledField(_doctorCtrl, 'Dr. Smith',
+                          //     validator: _req),
                           const SizedBox(height: 14),
                           _label('Country'),
                           const SizedBox(height: 8),
@@ -289,9 +296,13 @@ class _AppointmentBookingPageState extends State<AppointmentBookingPage> {
                                 elevation: 0,
                               ),
                               onPressed: () {
+
                                 FocusScope.of(context)
-                                    .unfocus(); // 👈 closes the real mobile keypad
+                                    .unfocus(); 
                                 _save(); // your save method
+    //                              final box = GetStorage();
+    // String? token = box.read('auth_token');
+    //                             AppointmentsRepo().createAppointment(jwtToken: token!, patientName: _patientCtrl.text, doctorName: _doctorCtrl.text, appointmentDate: _date!.toString());
                               },
                               // onPressed: _save,
                               child: const Text('Save Appointment',
