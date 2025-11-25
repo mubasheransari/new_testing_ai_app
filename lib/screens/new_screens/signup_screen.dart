@@ -8,11 +8,11 @@ import 'login_screen.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:motives_tneww/widget/toast_widget.dart';
-import '../../Bloc/global_bloc.dart';
-import '../../Bloc/global_event.dart';
-import '../../Bloc/global_state.dart';
-import 'login_screen.dart';
+
+// TODO: update these imports based on your project
+// import 'your_global_bloc.dart';
+// import 'new_login_screen.dart';
+// import 'toast.dart';
 
 class SignupScreen extends StatefulWidget {
   const SignupScreen({super.key});
@@ -23,16 +23,20 @@ class SignupScreen extends StatefulWidget {
 
 class _SignupScreenState extends State<SignupScreen> {
   static const accent = Color(0xFFE97C42);
+  static const fieldBg = Color(0xFFF4F5F7);
+
   final _formKey = GlobalKey<FormState>();
 
   bool obscurePwd = true;
   bool obscureCpwd = true;
 
+  // 1 = Individual, 2 = Professional
+  int _userType = 1;
+
   final TextEditingController nameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-  final TextEditingController confirmPasswordController =
-      TextEditingController();
+  final TextEditingController confirmPasswordController = TextEditingController();
 
   @override
   void dispose() {
@@ -53,21 +57,21 @@ class _SignupScreenState extends State<SignupScreen> {
   String? _confirmPasswordValidator(String? v) {
     final value = (v ?? '').trim();
     if (value.isEmpty) return 'Confirm your password';
-    if (value != passwordController.text.trim())
-      return 'Passwords do not match';
+    if (value != passwordController.text.trim()) return 'Passwords do not match';
     return null;
   }
 
   void _submit(BuildContext context) {
-    // Trigger all validators
     final ok = _formKey.currentState?.validate() ?? false;
     if (!ok) return;
 
+    // _userType -> 1 (Individual) or 2 (Professional)
     context.read<GlobalBloc>().add(
           SignUp(
             name: nameController.text.trim(),
             email: emailController.text.trim(),
             password: passwordController.text.trim(),
+            userType: _userType.toString(), // ✅ add this in your SignUp event/model
           ),
         );
   }
@@ -135,10 +139,20 @@ class _SignupScreenState extends State<SignupScreen> {
 
                 const SizedBox(height: 28),
 
+                // ✅ Account type selector
+                const Text('Account Type',
+                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
+                const SizedBox(height: 8),
+                _AccountTypeSelector(
+                  value: _userType,
+                  onChanged: (v) => setState(() => _userType = v),
+                ),
+
+                const SizedBox(height: 16),
+
                 // Name
                 const Text('Name',
-                    style:
-                        TextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
+                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
                 const SizedBox(height: 8),
                 TextFormField(
                   controller: nameController,
@@ -149,9 +163,9 @@ class _SignupScreenState extends State<SignupScreen> {
                   decoration: InputDecoration(
                     isDense: true,
                     filled: true,
-                    fillColor: const Color(0xFFF4F5F7),
-                    contentPadding: const EdgeInsets.symmetric(
-                        horizontal: 14, vertical: 16),
+                    fillColor: fieldBg,
+                    contentPadding:
+                        const EdgeInsets.symmetric(horizontal: 14, vertical: 16),
                     suffixIcon: const Icon(Icons.person_outline),
                     enabledBorder: border,
                     focusedBorder: border,
@@ -162,16 +176,14 @@ class _SignupScreenState extends State<SignupScreen> {
 
                 // Email
                 const Text('Email',
-                    style:
-                        TextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
+                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
                 const SizedBox(height: 8),
                 TextFormField(
                   controller: emailController,
                   keyboardType: TextInputType.emailAddress,
                   textInputAction: TextInputAction.next,
                   validator: (v) {
-                    if (v == null || v.trim().isEmpty)
-                      return 'Email is required';
+                    if (v == null || v.trim().isEmpty) return 'Email is required';
                     final ok = RegExp(r'^[^@\s]+@[^@\s]+\.[^@\s]+$')
                         .hasMatch(v.trim());
                     return ok ? null : 'Enter a valid email';
@@ -179,9 +191,9 @@ class _SignupScreenState extends State<SignupScreen> {
                   decoration: InputDecoration(
                     isDense: true,
                     filled: true,
-                    fillColor: const Color(0xFFF4F5F7),
-                    contentPadding: const EdgeInsets.symmetric(
-                        horizontal: 14, vertical: 16),
+                    fillColor: fieldBg,
+                    contentPadding:
+                        const EdgeInsets.symmetric(horizontal: 14, vertical: 16),
                     suffixIcon: const Icon(Icons.mail_outline),
                     enabledBorder: border,
                     focusedBorder: border,
@@ -192,8 +204,7 @@ class _SignupScreenState extends State<SignupScreen> {
 
                 // Password
                 const Text('Password',
-                    style:
-                        TextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
+                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
                 const SizedBox(height: 8),
                 TextFormField(
                   controller: passwordController,
@@ -208,9 +219,9 @@ class _SignupScreenState extends State<SignupScreen> {
                   decoration: InputDecoration(
                     isDense: true,
                     filled: true,
-                    fillColor: const Color(0xFFF4F5F7),
-                    contentPadding: const EdgeInsets.symmetric(
-                        horizontal: 14, vertical: 16),
+                    fillColor: fieldBg,
+                    contentPadding:
+                        const EdgeInsets.symmetric(horizontal: 14, vertical: 16),
                     suffixIcon: IconButton(
                       icon: Icon(
                           obscurePwd ? Icons.visibility_off : Icons.visibility),
@@ -224,8 +235,7 @@ class _SignupScreenState extends State<SignupScreen> {
                 const SizedBox(height: 16),
 
                 const Text('Confirm Password',
-                    style:
-                        TextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
+                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
                 const SizedBox(height: 8),
                 TextFormField(
                   controller: confirmPasswordController,
@@ -235,15 +245,13 @@ class _SignupScreenState extends State<SignupScreen> {
                   decoration: InputDecoration(
                     isDense: true,
                     filled: true,
-                    fillColor: const Color(0xFFF4F5F7),
-                    contentPadding: const EdgeInsets.symmetric(
-                        horizontal: 14, vertical: 16),
+                    fillColor: fieldBg,
+                    contentPadding:
+                        const EdgeInsets.symmetric(horizontal: 14, vertical: 16),
                     suffixIcon: IconButton(
-                      icon: Icon(obscureCpwd
-                          ? Icons.visibility_off
-                          : Icons.visibility),
-                      onPressed: () =>
-                          setState(() => obscureCpwd = !obscureCpwd),
+                      icon: Icon(
+                          obscureCpwd ? Icons.visibility_off : Icons.visibility),
+                      onPressed: () => setState(() => obscureCpwd = !obscureCpwd),
                     ),
                     enabledBorder: border,
                     focusedBorder: border,
@@ -255,21 +263,19 @@ class _SignupScreenState extends State<SignupScreen> {
                 BlocConsumer<GlobalBloc, GlobalState>(
                   listener: (context, state) {
                     if (state.signUpStatus == SignUpStatus.success) {
-                      toastWidget(
-                          'User Created Successfully! Login Now', Colors.green);
+                      toastWidget('User Created Successfully! Login Now',
+                          Colors.green);
                       Navigator.of(context).pushAndRemoveUntil(
                         MaterialPageRoute(
                             builder: (_) => const NewLoginScreen()),
-                        (Route<dynamic> route) => false, 
+                        (Route<dynamic> route) => false,
                       );
                     } else if (state.signUpStatus == SignUpStatus.failure) {
-                      toastWidget(
-                          state.errorMessageSignUp.toString(), Colors.red);
+                      toastWidget(state.errorMessageSignUp.toString(), Colors.red);
                     }
                   },
                   builder: (context, state) {
-                    final isLoading =
-                        state.signUpStatus == SignUpStatus.loading;
+                    final isLoading = state.signUpStatus == SignUpStatus.loading;
                     return Center(
                       child: SizedBox(
                         width: double.infinity,
@@ -285,7 +291,8 @@ class _SignupScreenState extends State<SignupScreen> {
                           child: isLoading
                               ? const Center(
                                   child: CircularProgressIndicator(
-                                      color: Colors.white))
+                                      color: Colors.white),
+                                )
                               : const Text('Sign Up',
                                   style: TextStyle(
                                       fontSize: 20,
@@ -299,7 +306,6 @@ class _SignupScreenState extends State<SignupScreen> {
 
                 const SizedBox(height: 22),
 
-                // Bottom link
                 InkWell(
                   onTap: () {
                     Navigator.push(
@@ -332,6 +338,68 @@ class _SignupScreenState extends State<SignupScreen> {
   }
 }
 
+class _AccountTypeSelector extends StatelessWidget {
+  static const accent = Color(0xFFE97C42);
+  static const fieldBg = Color(0xFFF4F5F7);
+
+  final int value; // 1 or 2
+  final ValueChanged<int> onChanged;
+
+  const _AccountTypeSelector({
+    required this.value,
+    required this.onChanged,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    Widget seg({
+      required String label,
+      required int val,
+    }) {
+      final selected = value == val;
+      return Expanded(
+        child: InkWell(
+          borderRadius: BorderRadius.circular(12),
+          onTap: () => onChanged(val),
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 160),
+            padding: const EdgeInsets.symmetric(vertical: 14),
+            decoration: BoxDecoration(
+              color: selected ? accent : Colors.transparent,
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Center(
+              child: Text(
+                label,
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w700,
+                  color: selected ? Colors.white : Colors.black87,
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
+    }
+
+    return Container(
+      padding: const EdgeInsets.all(4),
+      decoration: BoxDecoration(
+        color: fieldBg,
+        borderRadius: BorderRadius.circular(14),
+      ),
+      child: Row(
+        children: [
+          seg(label: 'Individual User', val: 1),
+          const SizedBox(width: 6),
+          seg(label: 'Professional User', val: 2),
+        ],
+      ),
+    );
+  }
+}
+
 class _DecorShapes extends StatelessWidget {
   const _DecorShapes();
 
@@ -347,8 +415,10 @@ class _DecorShapes extends StatelessWidget {
         child: Container(
           width: w,
           height: h,
-          decoration:
-              BoxDecoration(color: c, borderRadius: BorderRadius.circular(6)),
+          decoration: BoxDecoration(
+            color: c,
+            borderRadius: BorderRadius.circular(6),
+          ),
         ),
       );
     }
@@ -368,6 +438,9 @@ class _DecorShapes extends StatelessWidget {
   }
 }
 
+
+
+
 // class SignupScreen extends StatefulWidget {
 //   const SignupScreen({super.key});
 
@@ -381,11 +454,50 @@ class _DecorShapes extends StatelessWidget {
 
 //   bool obscurePwd = true;
 //   bool obscureCpwd = true;
+
 //   final TextEditingController nameController = TextEditingController();
 //   final TextEditingController emailController = TextEditingController();
 //   final TextEditingController passwordController = TextEditingController();
 //   final TextEditingController confirmPasswordController =
 //       TextEditingController();
+
+//   @override
+//   void dispose() {
+//     nameController.dispose();
+//     emailController.dispose();
+//     passwordController.dispose();
+//     confirmPasswordController.dispose();
+//     super.dispose();
+//   }
+
+//   String? _passwordValidator(String? v) {
+//     final value = (v ?? '').trim();
+//     if (value.isEmpty) return 'Password is required';
+//     if (value.length < 6) return 'Min 6 characters';
+//     return null;
+//   }
+
+//   String? _confirmPasswordValidator(String? v) {
+//     final value = (v ?? '').trim();
+//     if (value.isEmpty) return 'Confirm your password';
+//     if (value != passwordController.text.trim())
+//       return 'Passwords do not match';
+//     return null;
+//   }
+
+//   void _submit(BuildContext context) {
+//     // Trigger all validators
+//     final ok = _formKey.currentState?.validate() ?? false;
+//     if (!ok) return;
+
+//     context.read<GlobalBloc>().add(
+//           SignUp(
+//             name: nameController.text.trim(),
+//             email: emailController.text.trim(),
+//             password: passwordController.text.trim(),
+//           ),
+//         );
+//   }
 
 //   @override
 //   Widget build(BuildContext context) {
@@ -401,21 +513,19 @@ class _DecorShapes extends StatelessWidget {
 //           padding: const EdgeInsets.fromLTRB(20, 18, 20, 24),
 //           child: Form(
 //             key: _formKey,
+//             autovalidateMode: AutovalidateMode.onUserInteraction,
 //             child: Column(
 //               crossAxisAlignment: CrossAxisAlignment.start,
 //               children: [
+//                 // --- Header ---
 //                 Column(
 //                   crossAxisAlignment: CrossAxisAlignment.start,
 //                   children: [
-//                     Text(
-//                       'SIGNUP'.toUpperCase(),
-//                       style: TextStyle(
-//                         fontSize: 18,
-//                         fontWeight: FontWeight.w700,
-//                       ),
-//                     ),
-//                     SizedBox(height: 4),
-//                     SizedBox(
+//                     Text('SIGNUP'.toUpperCase(),
+//                         style: const TextStyle(
+//                             fontSize: 18, fontWeight: FontWeight.w700)),
+//                     const SizedBox(height: 4),
+//                     const SizedBox(
 //                       width: 66,
 //                       height: 3,
 //                       child: DecoratedBox(
@@ -429,14 +539,13 @@ class _DecorShapes extends StatelessWidget {
 //                 ),
 //                 const SizedBox(height: 22),
 
-//                 // Heading + decorative shapes
 //                 Row(
 //                   crossAxisAlignment: CrossAxisAlignment.start,
-//                   children: [
+//                   children: const [
 //                     Expanded(
 //                       child: Column(
 //                         crossAxisAlignment: CrossAxisAlignment.start,
-//                         children: const [
+//                         children: [
 //                           Text('Create Account,',
 //                               style: TextStyle(
 //                                   fontSize: 28, fontWeight: FontWeight.w700)),
@@ -447,7 +556,7 @@ class _DecorShapes extends StatelessWidget {
 //                         ],
 //                       ),
 //                     ),
-//                     const _DecorShapes(),
+//                     _DecorShapes(),
 //                   ],
 //                 ),
 
@@ -490,8 +599,8 @@ class _DecorShapes extends StatelessWidget {
 //                   validator: (v) {
 //                     if (v == null || v.trim().isEmpty)
 //                       return 'Email is required';
-//                     final ok =
-//                         RegExp(r'^[^@\s]+@[^@\s]+\.[^@\s]+$').hasMatch(v);
+//                     final ok = RegExp(r'^[^@\s]+@[^@\s]+\.[^@\s]+$')
+//                         .hasMatch(v.trim());
 //                     return ok ? null : 'Enter a valid email';
 //                   },
 //                   decoration: InputDecoration(
@@ -507,6 +616,8 @@ class _DecorShapes extends StatelessWidget {
 //                 ),
 
 //                 const SizedBox(height: 16),
+
+//                 // Password
 //                 const Text('Password',
 //                     style:
 //                         TextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
@@ -515,8 +626,12 @@ class _DecorShapes extends StatelessWidget {
 //                   controller: passwordController,
 //                   obscureText: obscurePwd,
 //                   textInputAction: TextInputAction.next,
-//                   validator: (v) =>
-//                       (v == null || v.length < 6) ? 'Min 6 characters' : null,
+//                   validator: _passwordValidator,
+//                   onChanged: (_) {
+//                     if (confirmPasswordController.text.isNotEmpty) {
+//                       _formKey.currentState?.validate();
+//                     }
+//                   },
 //                   decoration: InputDecoration(
 //                     isDense: true,
 //                     filled: true,
@@ -532,7 +647,9 @@ class _DecorShapes extends StatelessWidget {
 //                     focusedBorder: border,
 //                   ),
 //                 ),
+
 //                 const SizedBox(height: 16),
+
 //                 const Text('Confirm Password',
 //                     style:
 //                         TextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
@@ -540,8 +657,8 @@ class _DecorShapes extends StatelessWidget {
 //                 TextFormField(
 //                   controller: confirmPasswordController,
 //                   obscureText: obscureCpwd,
-//                   validator: (v) =>
-//                       (v == null || v.isEmpty) ? 'Confirm your password' : null,
+//                   textInputAction: TextInputAction.done,
+//                   validator: _confirmPasswordValidator,
 //                   decoration: InputDecoration(
 //                     isDense: true,
 //                     filled: true,
@@ -567,10 +684,10 @@ class _DecorShapes extends StatelessWidget {
 //                     if (state.signUpStatus == SignUpStatus.success) {
 //                       toastWidget(
 //                           'User Created Successfully! Login Now', Colors.green);
-//                       Navigator.push(
-//                         context,
+//                       Navigator.of(context).pushAndRemoveUntil(
 //                         MaterialPageRoute(
 //                             builder: (_) => const NewLoginScreen()),
+//                         (Route<dynamic> route) => false, 
 //                       );
 //                     } else if (state.signUpStatus == SignUpStatus.failure) {
 //                       toastWidget(
@@ -578,6 +695,8 @@ class _DecorShapes extends StatelessWidget {
 //                     }
 //                   },
 //                   builder: (context, state) {
+//                     final isLoading =
+//                         state.signUpStatus == SignUpStatus.loading;
 //                     return Center(
 //                       child: SizedBox(
 //                         width: double.infinity,
@@ -589,22 +708,12 @@ class _DecorShapes extends StatelessWidget {
 //                               borderRadius: BorderRadius.circular(14),
 //                             ),
 //                           ),
-//                           onPressed: () {
-//                             context.read<GlobalBloc>().add(
-//                                   SignUp(
-//                                     name: nameController.text.trim(),
-//                                     email: emailController.text.trim(),
-//                                     password: passwordController.text.trim(),
-//                                   ),
-//                                 );
-//                           },
-//                           child: state.signUpStatus == SignUpStatus.loading
-//                               ? Center(
+//                           onPressed: isLoading ? null : () => _submit(context),
+//                           child: isLoading
+//                               ? const Center(
 //                                   child: CircularProgressIndicator(
-//                                     color: Colors.white,
-//                                   ),
-//                                 )
-//                               : Text('Sign Up',
+//                                       color: Colors.white))
+//                               : const Text('Sign Up',
 //                                   style: TextStyle(
 //                                       fontSize: 20,
 //                                       fontWeight: FontWeight.w700,
@@ -614,28 +723,6 @@ class _DecorShapes extends StatelessWidget {
 //                     );
 //                   },
 //                 ),
-//                 /* SizedBox(
-//                   width: double.infinity,
-//                   child: FilledButton(
-//                     style: FilledButton.styleFrom(
-//                       backgroundColor: accent,
-//                       padding: const EdgeInsets.symmetric(vertical: 16),
-//                       shape: RoundedRectangleBorder(
-//                         borderRadius: BorderRadius.circular(14),
-//                       ),
-//                     ),
-//                     onPressed: () {
-//                       if (_formKey.currentState!.validate()) {
-//                         // TODO: submit sign-up
-//                       }
-//                     },
-//                     child: const Text('Sign Up',
-//                         style: TextStyle(
-//                             fontSize: 18,
-//                             fontWeight: FontWeight.w700,
-//                             color: Colors.white)),
-//                   ),
-//                 ),*/
 
 //                 const SizedBox(height: 22),
 
@@ -672,30 +759,6 @@ class _DecorShapes extends StatelessWidget {
 //   }
 // }
 
-// class _CircleIcon extends StatelessWidget {
-//   final Widget child;
-//   const _CircleIcon({required this.child});
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Container(
-//       width: 58,
-//       height: 58,
-//       decoration: const BoxDecoration(
-//         color: Color(0xFFEFEFEF),
-//         shape: BoxShape.circle,
-//         boxShadow: [
-//           BoxShadow(
-//               blurRadius: 4, offset: Offset(0, 1), color: Color(0x11000000)),
-//         ],
-//       ),
-//       alignment: Alignment.center,
-//       child: child,
-//     );
-//   }
-// }
-
-// // Same decorative angled blocks used on Login
 // class _DecorShapes extends StatelessWidget {
 //   const _DecorShapes();
 

@@ -31,7 +31,7 @@ class Repository {
   }
 
   Future<http.Response> signUp(
-      String name, String email, String password) async {
+      String name, String email, String password,String customerType) async {
     try {
       final response = await http.post(
         Uri.parse("https://doctorsipe.com/retina/api/users"),
@@ -43,6 +43,7 @@ class Repository {
           "name": name,
           "email": email,
           "password": password,
+          "customerType":customerType
         }),
       );
 

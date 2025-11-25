@@ -18,10 +18,10 @@ class Login extends GlobalEvent {
 }
 
 class SignUp extends GlobalEvent {
-  SignUp({this.name,this.email, this.password});
+  SignUp({this.name,this.email, this.password,this.userType});
 
-  String? name, email, password;
+  String? name, email, password, userType;
 
   @override
-  List<Object> get props => [name!,email!, password!];
+  List<Object> get props => [name!,email!, password!,userType!];
 }

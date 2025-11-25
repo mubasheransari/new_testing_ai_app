@@ -33,8 +33,8 @@ class ProfileScreen extends StatelessWidget {
                 children: [
                   InkWell(
                     onTap: () {
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => ScanPage()));
+                      // Navigator.push(context,
+                      //     MaterialPageRoute(builder: (context) => ScanPage()));
                     },
                     child: _SectionTile(
                       icon: Icons.chat_bubble_outline,
@@ -109,8 +109,8 @@ class _Header extends StatelessWidget {
             alignment: Alignment.center,
             child: InkWell(
               onTap: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => ScanPage()));
+                // Navigator.push(context,
+                //     MaterialPageRoute(builder: (context) => ScanPage()));
               },
               child: Text(
                 'My Profile',

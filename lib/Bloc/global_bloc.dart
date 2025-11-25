@@ -4,7 +4,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:motives_tneww/Bloc/global_event.dart';
 import 'package:motives_tneww/Bloc/global_state.dart';
 import 'package:motives_tneww/Repository/repository.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class GlobalBloc extends Bloc<GlobalEvent, GlobalState> {
   GlobalBloc() : super(GlobalState()) {
@@ -86,6 +85,7 @@ class GlobalBloc extends Bloc<GlobalEvent, GlobalState> {
         event.name ?? "",
         event.email ?? "",
         event.password ?? "",
+        event.userType ??""
       );
 
       print("Status Code: ${response.statusCode}");
