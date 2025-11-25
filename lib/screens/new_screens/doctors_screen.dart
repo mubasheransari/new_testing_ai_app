@@ -32,9 +32,9 @@ class DoctorHomeScreen extends StatelessWidget {
 
               const SizedBox(height: 18),
 
-              const _SearchField(),
+              // const _SearchField(),
 
-              const SizedBox(height: 26),
+              // const SizedBox(height: 26),
 
               // SECTION TITLE
               Row(
