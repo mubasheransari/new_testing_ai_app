@@ -88,7 +88,7 @@ class DoctorHomeScreen extends StatelessWidget {
                   return Padding(
                     padding: const EdgeInsets.only(bottom: 12),
                     child: _DoctorCard(
-                      name: p.name,
+                      name: p.id.toString(),
                       title: p.email,
                     ),
                   );
@@ -102,61 +102,7 @@ class DoctorHomeScreen extends StatelessWidget {
   }
 }
 
-// ---------------- SEARCH FIELD ----------------
 
-class _SearchField extends StatelessWidget {
-  const _SearchField();
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        gradient: const LinearGradient(
-          colors: [Colors.white, Color(0xFFFFFBF8)],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
-        borderRadius: BorderRadius.circular(18),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.05),
-            blurRadius: 16,
-            offset: const Offset(0, 8),
-          ),
-        ],
-      ),
-      child: Row(
-        children: [
-          const SizedBox(width: 14),
-          const Icon(Icons.search_rounded, color: Colors.black45),
-          const SizedBox(width: 4),
-          const Expanded(
-            child: TextField(
-              decoration: InputDecoration(
-                hintText: 'Search doctors',
-                hintStyle: TextStyle(fontSize: 14, color: Colors.black38),
-                border: InputBorder.none,
-              ),
-            ),
-          ),
-          // Container(
-          //   margin: const EdgeInsets.only(right: 8),
-          //   decoration: BoxDecoration(
-          //     color: DoctorHomeScreen.accent,
-          //     borderRadius: BorderRadius.circular(14),
-          //   ),
-          //   child: IconButton(
-          //     padding: const EdgeInsets.all(8),
-          //     icon: const Icon(Icons.tune_rounded,
-          //         color: Colors.white, size: 20),
-          //     onPressed: () {},
-          //   ),
-          // ),
-        ],
-      ),
-    );
-  }
-}
 
 
 

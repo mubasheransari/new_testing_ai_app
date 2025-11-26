@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:motives_tneww/Bloc/global_bloc.dart';
 import 'package:motives_tneww/Repository/appointments_repository.dart';
 
 import 'appoinment_list.dart';
@@ -100,7 +102,7 @@ class _AppointmentBookingPageState extends State<AppointmentBookingPage> {
       return;
     }
     final a = Appointment(
-      patientName: _patientCtrl.text.trim(),
+      patientName: context.read<GlobalBloc>().state.loginModel!.user.id.toString(),
       doctorName:widget.doctorName,
       country: _countryCtrl.text.trim(),
       date: _date!,
