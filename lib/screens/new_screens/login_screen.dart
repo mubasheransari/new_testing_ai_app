@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:motives_tneww/screens/new_screens/doctors_screen.dart';
 import 'package:motives_tneww/screens/new_screens/home_screen.dart';
 import 'package:motives_tneww/screens/new_screens/signup_screen.dart';
 import 'package:motives_tneww/widget/toast_widget.dart';
@@ -150,11 +151,23 @@ class _NewLoginScreenState extends State<NewLoginScreen> {
                     box.write('email', emailController.text.trim());
                     box.write('password', passwordController.text.trim());
                     toastWidget('Login Successfully!', Colors.green);
-
-                    Navigator.of(context).pushAndRemoveUntil(
+                    if(state.loginModel!.user.customerType == 1){
+  Navigator.of(context).pushAndRemoveUntil(
                       MaterialPageRoute(builder: (_) => const RootTabs()),
                       (Route<dynamic> route) => false, // remove everything
                     );
+                    }
+                    else{
+                        Navigator.of(context).pushAndRemoveUntil(
+                      MaterialPageRoute(builder: (_) => const DoctorHomeScreen()),
+                      (Route<dynamic> route) => false, // remove everything
+                    );
+                    }//Testing@123
+
+                    // Navigator.of(context).pushAndRemoveUntil(
+                    //   MaterialPageRoute(builder: (_) => const RootTabs()),
+                    //   (Route<dynamic> route) => false, // remove everything
+                    // );
 
                     // Navigator.push(context,
                     //     MaterialPageRoute(builder: (context) => RootTabs()));

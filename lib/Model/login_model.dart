@@ -120,6 +120,8 @@ class User {
   final String createdAt;
   final String updatedAt;
   final int rewardPoints;
+  final int customerType;
+  bool isApproved;
 
   User({
     required this.id,
@@ -137,6 +139,8 @@ class User {
     required this.createdAt,
     required this.updatedAt,
     required this.rewardPoints,
+    required this.customerType,
+    required this.isApproved
   });
 
   factory User.fromJson(Map<String, dynamic> json) => User(
@@ -155,6 +159,8 @@ class User {
         createdAt: _asString(json["created_at"]) ?? "",
         updatedAt: _asString(json["updated_at"]) ?? "",
         rewardPoints: _asInt(json["reward_points"]) ?? 0,
+        customerType: _asInt(json["customerType"]) ?? 0,
+       isApproved: json["isApproved"]
       );
 
   Map<String, dynamic> toJson() => {
@@ -173,6 +179,8 @@ class User {
         "created_at": createdAt,
         "updated_at": updatedAt,
         "reward_points": rewardPoints,
+        "customerType":customerType,
+        "isApproved":isApproved
       };
 }
 
