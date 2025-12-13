@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:motives_tneww/Bloc/global_bloc.dart';
+import 'package:motives_tneww/screens/new_screens/appoinment_list.dart';
+import 'package:motives_tneww/screens/new_screens/appointment_notification.dart';
 import 'package:motives_tneww/screens/new_screens/appointment_screen.dart';
 
 
@@ -56,7 +58,7 @@ class DoctorHomeScreen extends StatelessWidget {
                     ),
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
-                      children: const [
+                      children:  [
                         Icon(Icons.star_rounded,
                             size: 14, color: accentDark),
                         SizedBox(width: 4),
@@ -66,6 +68,13 @@ class DoctorHomeScreen extends StatelessWidget {
                             fontSize: 11,
                             color: accentDark,
                             fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                          NotificationBell(
+                          onTap: () => Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (_) => const AppointmentListPage()),
                           ),
                         ),
                       ],
@@ -78,7 +87,7 @@ class DoctorHomeScreen extends StatelessWidget {
 
               const SizedBox(height: 16),
 
-              // DOCTORS LIST
+              // DOCTORS LIST Testing@123
               ListView.builder(
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
