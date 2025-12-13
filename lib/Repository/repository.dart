@@ -15,7 +15,7 @@ class Repository {
         Uri.parse(loginUrl),
         body: {
           "email": email,
-          "password": password,
+          "password": password,//Testing@123
         },
       );
 

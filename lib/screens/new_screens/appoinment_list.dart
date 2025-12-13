@@ -96,11 +96,11 @@ class AppointmentListPage extends StatelessWidget {
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text(a.patientName,
-                                        style: const TextStyle(
-                                            fontWeight: FontWeight.w700,
-                                            fontSize: 16)),
-                                    const SizedBox(height: 6),
+                                    // Text(a.country,
+                                    //     style: const TextStyle(
+                                    //         fontWeight: FontWeight.w700,
+                                    //         fontSize: 16)),
+                                   // const SizedBox(height: 6),
                                     _kv('Doctor', a.doctorName),
                                     _kv('Country', a.country),
                                     _kv('Date', _fmt(a.date)),
@@ -131,7 +131,7 @@ class AppointmentListPage extends StatelessWidget {
                   },
                 ),
               ),
-              Padding(
+             /* Padding(
                 padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
                 child: SizedBox(
                   height: 44,
@@ -148,7 +148,7 @@ class AppointmentListPage extends StatelessWidget {
                     label: const Text('Clear all'),
                   ),
                 ),
-              ),
+              ),*/
             ],
           ),
         ),

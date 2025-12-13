@@ -61,7 +61,7 @@ class _BmiPageState extends State<BmiPage> {
     super.dispose();
   }
 
-  // ---------- Seed from GlobalBloc (API values) ----------
+  // Testing@123 ---------- Seed from GlobalBloc (API values) ----------
   void _seedFromBloc() {
     final state = context.read<GlobalBloc>().state;
     final apiItem = state.loginModel?.bmi.last;
