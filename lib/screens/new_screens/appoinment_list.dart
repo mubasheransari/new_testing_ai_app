@@ -101,7 +101,7 @@ class AppointmentListPage extends StatelessWidget {
                                     //         fontWeight: FontWeight.w700,
                                     //         fontSize: 16)),
                                    // const SizedBox(height: 6),
-                                    _kv('Doctor', a.doctorName),
+                                    //_kv('Patient', a.patientName),
                                     _kv('Country', a.country),
                                     _kv('Date', _fmt(a.date)),
                                     if (a.notes.trim().isNotEmpty)
