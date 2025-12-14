@@ -128,6 +128,7 @@ class _AppointmentBookingPageState extends State<AppointmentBookingPage> {
     final box = GetStorage();
     String? token = box.read('auth_token');
     AppointmentsRepo().createAppointment(
+      notes: _notesCtrl.text.trim(),
       jwtToken: token!,
       patientName: _patientCtrl.text,
       doctorName: widget.doctorName,

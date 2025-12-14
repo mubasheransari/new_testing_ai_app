@@ -19,8 +19,10 @@ class AppointmentsRepo {
         "patient_name": patientName,
         "doctor_name": doctorName,
         "appointment_date": appointmentDate,
-        if (country != null && country.trim().isNotEmpty) "country": country.trim(),
-        if (notes != null && notes.trim().isNotEmpty) "notes": notes.trim(),
+        "country": country,
+        "notes": notes,
+        // if (country != null && country.trim().isNotEmpty) "country": country.trim(),
+        // if (notes != null && notes.trim().isNotEmpty) "notes": notes.trim(),
       };
 
       final response = await http.post(
