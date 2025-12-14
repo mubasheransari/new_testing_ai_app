@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:motives_tneww/screens/new_screens/home_screen.dart';
+import 'package:motives_tneww/screens/professional_screen/professional_screen_appointments.dart';
 import 'onboarding_screen.dart';
 
 class NewSplashScreen extends StatefulWidget {
@@ -25,15 +26,30 @@ class _NewSplashScreenState extends State<NewSplashScreen>
   @override
   void initState() {
     var box = GetStorage();
-    String? token = box.read('auth_token');
-    print("Token: $token");
+    String? type=     box.read('type');
+    // String? token = box.read('auth_token');
+    print("TYPE: $type");
     Timer(const Duration(seconds: 3), () {
-      if (token != null) {
-        Navigator.pushAndRemoveUntil(
+      if (type != null) {
+        if(type == "1"){
+     Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(builder: (context) => RootTabs()),
           (route) => false,
         );
+        }
+        else if(type == "2"){
+     Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (context) => DoctorAppointmentsScreen()),
+          (route) => false,
+        );
+        }
+        // Navigator.pushAndRemoveUntil(
+        //   context,
+        //   MaterialPageRoute(builder: (context) => RootTabs()),
+        //   (route) => false,
+        // );
       } else {
         Navigator.pushAndRemoveUntil(
           context,

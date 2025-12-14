@@ -41,6 +41,7 @@ class _RootTabsState extends State<RootTabs> {
             // Logout item
             final ok = await showLogoutDialog(context); // use your dialog
             if (ok == true) {
+                  box.remove('type');
               // context.read<GlobalBloc>().add(Logout()); // optional
               Navigator.of(context).pushAndRemoveUntil(
                 MaterialPageRoute(builder: (_) => const NewLoginScreen()),

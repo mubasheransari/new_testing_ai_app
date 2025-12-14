@@ -4,6 +4,7 @@ import 'package:get_storage/get_storage.dart';
 import 'package:motives_tneww/screens/new_screens/doctors_screen.dart';
 import 'package:motives_tneww/screens/new_screens/home_screen.dart';
 import 'package:motives_tneww/screens/new_screens/signup_screen.dart';
+import 'package:motives_tneww/screens/professional_screen/professional_screen_appointments.dart';
 import 'package:motives_tneww/widget/toast_widget.dart';
 import '../../Bloc/global_bloc.dart';
 import '../../Bloc/global_event.dart';
@@ -152,14 +153,16 @@ class _NewLoginScreenState extends State<NewLoginScreen> {
                     box.write('password', passwordController.text.trim());
                     toastWidget('Login Successfully!', Colors.green);
                     if(state.loginModel!.user.customerType == 1){
+                      box.write('type', '1');
   Navigator.of(context).pushAndRemoveUntil(
                       MaterialPageRoute(builder: (_) => const RootTabs()),
                       (Route<dynamic> route) => false, // remove everything
                     );
                     }
                     else{
+                       box.write('type', '2');
                         Navigator.of(context).pushAndRemoveUntil(
-                      MaterialPageRoute(builder: (_) => const DoctorHomeScreen()),
+                      MaterialPageRoute(builder: (_) => const DoctorAppointmentsScreen()),
                       (Route<dynamic> route) => false, // remove everything
                     );
                     }//Testing@123

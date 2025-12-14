@@ -54,8 +54,9 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     final box = GetStorage();
-    String? token = box.read('auth_token');
-    print("Token: $token");
+    // String? token = box.read('auth_token');
+    // print("Token: $token");
+     var type=   box.read('type');
     return MaterialApp(
         title: 'Dr Sip',
         debugShowCheckedModeBanner: false,
