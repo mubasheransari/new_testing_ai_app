@@ -99,6 +99,7 @@ class DoctorHomeScreen extends StatelessWidget {
                     child: _DoctorCard(
                       name: p.name,
                       title: p.email,
+                      id: p.id.toString(),
                     ),
                   );
                 },
@@ -116,10 +117,12 @@ class DoctorHomeScreen extends StatelessWidget {
 
 
 class _DoctorCard extends StatelessWidget {
+   final String id;
   final String name;
   final String title;
 
   const _DoctorCard({
+    required this.id,
     required this.name,
     required this.title,
   });
@@ -233,7 +236,7 @@ class _DoctorCard extends StatelessWidget {
                 icon: const Icon(Icons.arrow_forward_rounded,
                     color: Colors.white, size: 20),
                 onPressed: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (context)=> AppointmentBookingPage(doctorName: name)));
+                    Navigator.push(context, MaterialPageRoute(builder: (context)=> AppointmentBookingPage(doctorName: id)));
                 },
               ),
             ),

@@ -9,14 +9,15 @@ import 'appointment_notification.dart';
 
 const _hint = Color(0xFF8E8E93);
 const _accent = Color(0xFFFF7A3D);
-const _header = Color(0xFFFF9156);
+const _header = Color(0xFFFF9156); //Testing@123
 
 class _Card extends StatelessWidget {
   final Widget child;
   final EdgeInsetsGeometry padding;
-  const _Card(
-      {required this.child,
-      this.padding = const EdgeInsets.fromLTRB(16, 16, 16, 12)});
+  const _Card({
+    required this.child,
+    this.padding = const EdgeInsets.fromLTRB(16, 16, 16, 12),
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -28,9 +29,10 @@ class _Card extends StatelessWidget {
           borderRadius: BorderRadius.circular(20),
           boxShadow: [
             BoxShadow(
-                color: Colors.black.withOpacity(.06),
-                blurRadius: 14,
-                offset: const Offset(0, 6))
+              color: Colors.black.withOpacity(.06),
+              blurRadius: 14,
+              offset: const Offset(0, 6),
+            ),
           ],
         ),
         padding: padding,
@@ -41,9 +43,10 @@ class _Card extends StatelessWidget {
 }
 
 /// ====== BOOKING PAGE (upper design same as BMI) ======
+// ignore: must_be_immutable
 class AppointmentBookingPage extends StatefulWidget {
   String doctorName;
-   AppointmentBookingPage({super.key,required this.doctorName});
+  AppointmentBookingPage({super.key, required this.doctorName});
 
   @override
   State<AppointmentBookingPage> createState() => _AppointmentBookingPageState();
@@ -74,8 +77,11 @@ class _AppointmentBookingPageState extends State<AppointmentBookingPage> {
 
   Future<void> _pickDate() async {
     final now = DateTime.now();
-    final first = DateTime(now.year, now.month, now.day)
-        .add(const Duration(days: 1)); // > today
+    final first = DateTime(
+      now.year,
+      now.month,
+      now.day,
+    ).add(const Duration(days: 1)); // > today
     final picked = await showDatePicker(
       context: context,
       initialDate: first,
@@ -84,8 +90,10 @@ class _AppointmentBookingPageState extends State<AppointmentBookingPage> {
       builder: (context, child) {
         return Theme(
           data: Theme.of(context).copyWith(
-            colorScheme:
-                ColorScheme.fromSeed(seedColor: _accent, primary: _accent),
+            colorScheme: ColorScheme.fromSeed(
+              seedColor: _accent,
+              primary: _accent,
+            ),
           ),
           child: child!,
         );
@@ -98,25 +106,37 @@ class _AppointmentBookingPageState extends State<AppointmentBookingPage> {
     if (!_formKey.currentState!.validate()) return;
     if (_date == null) {
       ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Please select appointment date')));
+        const SnackBar(content: Text('Please select appointment date')),
+      );
       return;
     }
     final a = Appointment(
-      patientName: context.read<GlobalBloc>().state.loginModel!.user.id.toString(),
-      doctorName:widget.doctorName,
+      patientName: context
+          .read<GlobalBloc>()
+          .state
+          .loginModel!
+          .user
+          .id
+          .toString(),
+      doctorName: widget.doctorName,
       country: _countryCtrl.text.trim(),
       date: _date!,
       notes: _notesCtrl.text.trim(),
     );
     await AppointmentStore.I.add(a);
 
-
-                                     final box = GetStorage();
+    final box = GetStorage();
     String? token = box.read('auth_token');
-                                AppointmentsRepo().createAppointment(jwtToken: token!, patientName: _patientCtrl.text, doctorName: widget.doctorName, appointmentDate: _date!.toString());
+    AppointmentsRepo().createAppointment(
+      jwtToken: token!,
+      patientName: _patientCtrl.text,
+      doctorName: widget.doctorName,
+      appointmentDate: _date!.toString(),
+    );
 
-    ScaffoldMessenger.of(context)
-        .showSnackBar(const SnackBar(content: Text('Appointment saved')));
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(const SnackBar(content: Text('Appointment saved')));
     _formKey.currentState!.reset();
     setState(() => _date = null);
   }
@@ -147,23 +167,27 @@ class _AppointmentBookingPageState extends State<AppointmentBookingPage> {
                   // Top row: Title + Bell (white like BMI header text)
                   Padding(
                     padding: const EdgeInsets.symmetric(
-                        horizontal: 16, vertical: 10),
+                      horizontal: 16,
+                      vertical: 10,
+                    ),
                     child: Row(
                       children: [
                         const Expanded(
                           child: Text(
                             'Appointment Booking',
                             style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 20,
-                                fontWeight: FontWeight.w700),
+                              color: Colors.white,
+                              fontSize: 20,
+                              fontWeight: FontWeight.w700,
+                            ),
                           ),
                         ),
                         NotificationBell(
                           onTap: () => Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (_) => const AppointmentListPage()),
+                              builder: (_) => const AppointmentListPage(),
+                            ),
                           ),
                         ),
                       ],
@@ -188,19 +212,23 @@ class _AppointmentBookingPageState extends State<AppointmentBookingPage> {
                                 Colors.green,
                                 Colors.orange,
                                 Colors.red,
-                                Colors.blue
+                                Colors.blue,
                               ],
                               stops: [0.0, .46, .70, .90, 1.0],
                             ),
                             boxShadow: [
                               BoxShadow(
-                                  color: Colors.black.withOpacity(.08),
-                                  blurRadius: 10)
+                                color: Colors.black.withOpacity(.08),
+                                blurRadius: 10,
+                              ),
                             ],
                           ),
                           child: const Center(
-                            child: Icon(Icons.calendar_month,
-                                color: Colors.white, size: 35),
+                            child: Icon(
+                              Icons.calendar_month,
+                              color: Colors.white,
+                              size: 35,
+                            ),
                           ),
                         ),
                         const SizedBox(width: 12),
@@ -208,20 +236,23 @@ class _AppointmentBookingPageState extends State<AppointmentBookingPage> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              const Text('Book your next appointment',
-                                  style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w700)),
+                              const Text(
+                                'Book your next appointment',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
                               const SizedBox(height: 6),
                               Text(
                                 _date == null
                                     ? 'Pick a date'
                                     : _fmtDate(_date!),
                                 style: TextStyle(
-                                    fontSize: 14,
-                                    color:
-                                        _date == null ? _hint : Colors.black87,
-                                    fontWeight: FontWeight.w600),
+                                  fontSize: 14,
+                                  color: _date == null ? _hint : Colors.black87,
+                                  fontWeight: FontWeight.w600,
+                                ),
                               ),
                               const SizedBox(height: 8),
                               SizedBox(
@@ -231,8 +262,8 @@ class _AppointmentBookingPageState extends State<AppointmentBookingPage> {
                                     backgroundColor: _accent,
                                     foregroundColor: Colors.white,
                                     shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(12)),
+                                      borderRadius: BorderRadius.circular(12),
+                                    ),
                                     elevation: 0,
                                   ),
                                   onPressed: _pickDate,
@@ -242,7 +273,7 @@ class _AppointmentBookingPageState extends State<AppointmentBookingPage> {
                               ),
                             ],
                           ),
-                        )
+                        ),
                       ],
                     ),
                   ),
@@ -258,8 +289,11 @@ class _AppointmentBookingPageState extends State<AppointmentBookingPage> {
                         children: [
                           _label('Patient Name'),
                           const SizedBox(height: 8),
-                          _filledField(_patientCtrl, 'John Doe',
-                              validator: _req),
+                          _filledField(
+                            _patientCtrl,
+                            'John Doe',
+                            validator: _req,
+                          ),
                           const SizedBox(height: 14),
                           // _label('Doctor Name'),
                           // const SizedBox(height: 8),
@@ -268,8 +302,11 @@ class _AppointmentBookingPageState extends State<AppointmentBookingPage> {
                           const SizedBox(height: 14),
                           _label('Country'),
                           const SizedBox(height: 8),
-                          _filledField(_countryCtrl, 'Australia',
-                              validator: _req),
+                          _filledField(
+                            _countryCtrl,
+                            'Australia',
+                            validator: _req,
+                          ),
                           const SizedBox(height: 14),
                           // _label('Appointment Date'),
                           // const SizedBox(height: 8),
@@ -294,22 +331,22 @@ class _AppointmentBookingPageState extends State<AppointmentBookingPage> {
                                 backgroundColor: _accent,
                                 foregroundColor: Colors.white,
                                 shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(14)),
+                                  borderRadius: BorderRadius.circular(14),
+                                ),
                                 elevation: 0,
                               ),
                               onPressed: () {
-
-                                FocusScope.of(context)
-                                    .unfocus(); 
+                                FocusScope.of(context).unfocus();
                                 _save(); // your save method
-    //                              final box = GetStorage();
-    // String? token = box.read('auth_token');
-    //                             AppointmentsRepo().createAppointment(jwtToken: token!, patientName: _patientCtrl.text, doctorName: _doctorCtrl.text, appointmentDate: _date!.toString());
+                                //                              final box = GetStorage();
+                                // String? token = box.read('auth_token');
+                                //                             AppointmentsRepo().createAppointment(jwtToken: token!, patientName: _patientCtrl.text, doctorName: _doctorCtrl.text, appointmentDate: _date!.toString());
                               },
                               // onPressed: _save,
-                              child: const Text('Save Appointment',
-                                  style:
-                                      TextStyle(fontWeight: FontWeight.w700)),
+                              child: const Text(
+                                'Save Appointment',
+                                style: TextStyle(fontWeight: FontWeight.w700),
+                              ),
                             ),
                           ),
                         ],
@@ -331,13 +368,18 @@ class _AppointmentBookingPageState extends State<AppointmentBookingPage> {
   String _fmtDate(DateTime d) =>
       '${d.year}-${d.month.toString().padLeft(2, '0')}-${d.day.toString().padLeft(2, '0')}';
 
-  Widget _label(String s) => Text(s,
-      style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 16));
+  Widget _label(String s) => Text(
+    s,
+    style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 16),
+  );
 
-  Widget _filledField(TextEditingController c, String hint,
-      {int maxLines = 1,
-      bool enabled = true,
-      String? Function(String?)? validator}) {
+  Widget _filledField(
+    TextEditingController c,
+    String hint, {
+    int maxLines = 1,
+    bool enabled = true,
+    String? Function(String?)? validator,
+  }) {
     return TextFormField(
       controller: c,
       enabled: enabled,
@@ -349,268 +391,16 @@ class _AppointmentBookingPageState extends State<AppointmentBookingPage> {
         fillColor: const Color(0xFFF5F5F7),
         hintText: hint,
         hintStyle: const TextStyle(color: _hint),
-        contentPadding:
-            const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 14,
+          vertical: 14,
+        ),
         border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(14),
-            borderSide: BorderSide.none),
+          borderRadius: BorderRadius.circular(14),
+          borderSide: BorderSide.none,
+        ),
       ),
     );
   }
 }
 
-
-// class AppointmentFormScreen extends StatefulWidget {
-//   const AppointmentFormScreen({super.key});
-
-//   @override
-//   State<AppointmentFormScreen> createState() => _AppointmentFormScreenState();
-// }
-
-// class _AppointmentFormScreenState extends State<AppointmentFormScreen> {
-//   final _formKey = GlobalKey<FormState>();
-//   final _patientCtrl = TextEditingController();
-//   final _doctorCtrl = TextEditingController();
-//   final _countryCtrl = TextEditingController();
-//   final _notesCtrl = TextEditingController();
-//   DateTime? _selectedDate;
-
-//   @override
-//   void initState() {
-//     super.initState();
-//     // ensure store is ready (safe if called multiple times)
-//     AppointmentStore.I.init();
-//   }
-
-//   @override
-//   void dispose() {
-//     _patientCtrl.dispose();
-//     _doctorCtrl.dispose();
-//     _countryCtrl.dispose();
-//     _notesCtrl.dispose();
-//     super.dispose();
-//   }
-
-//   Future<void> _pickDate() async {
-//     final now = DateTime.now();
-//     final tomorrow = DateTime(now.year, now.month, now.day).add(const Duration(days: 1));
-//     final picked = await showDatePicker(
-//       context: context,
-//       initialDate: tomorrow,
-//       firstDate: tomorrow,           // > today
-//       lastDate: DateTime(now.year + 3),
-//       builder: (context, child) {
-//         // Keep it light – still our theme
-//         return Theme(
-//           data: Theme.of(context).copyWith(
-//             colorScheme: ColorScheme.fromSeed(seedColor: kAccent, primary: kAccent),
-//           ),
-//           child: child!,
-//         );
-//       },
-//     );
-//     if (picked != null) {
-//       setState(() => _selectedDate = picked);
-//     }
-//   }
-
-//   Future<void> _save() async {
-//     if (!_formKey.currentState!.validate()) return;
-//     if (_selectedDate == null) {
-//       ScaffoldMessenger.of(context).showSnackBar(
-//         const SnackBar(content: Text('Please pick an appointment date')),
-//       );
-//       return;
-//     }
-
-//     final a = Appointment(
-//       patientName: _patientCtrl.text.trim(),
-//       doctorName: _doctorCtrl.text.trim(),
-//       country: _countryCtrl.text.trim(),
-//       appointmentDate: _selectedDate!,
-//       notes: _notesCtrl.text.trim(),
-//     );
-
-//     await AppointmentStore.I.add(a);
-
-//     ScaffoldMessenger.of(context).showSnackBar(
-//       const SnackBar(content: Text('Appointment saved')),
-//     );
-
-//     // clear for another entry
-//     _formKey.currentState!.reset();
-//     setState(() => _selectedDate = null);
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     final border = themedBorder(context);
-
-//     return Scaffold(
-//       backgroundColor: Colors.white,
-//       appBar: AppBar(
-//         title: const Text('Book Appointment',
-//             style: TextStyle(fontWeight: FontWeight.w700)),
-//         actions: [
-//           NotificationBell(
-//             onTap: () => Navigator.push(
-//               context,
-//               MaterialPageRoute(builder: (_) => const AppointmentListScreen()),
-//             ),
-//           ),
-//           const SizedBox(width: 8),
-//         ],
-//       ),
-//       body: SafeArea(
-//         child: SingleChildScrollView(
-//           padding: const EdgeInsets.fromLTRB(20, 18, 20, 24),
-//           child: Column(
-//             crossAxisAlignment: CrossAxisAlignment.start,
-//             children: [
-//               // Heading bar (like Login headline + accent line)
-//               Row(
-//                 children: [
-//                   Text('APPOINTMENT',
-//                       style: TextStyle(
-//                         fontSize: 18,
-//                         fontWeight: FontWeight.w700,
-//                         color: Colors.black87,
-//                       )),
-//                   const Spacer(),
-//                   const DecorShapesSmall(),
-//                 ],
-//               ),
-//               const SizedBox(height: 4),
-//               SizedBox(
-//                 width: 80,
-//                 height: 3,
-//                 child: DecoratedBox(
-//                   decoration: BoxDecoration(
-//                     color: kAccent,
-//                     borderRadius: const BorderRadius.all(Radius.circular(2)),
-//                   ),
-//                 ),
-//               ),
-//               const SizedBox(height: 18),
-
-//               // Form
-//               Form(
-//                 key: _formKey,
-//                 child: Column(
-//                   crossAxisAlignment: CrossAxisAlignment.start,
-//                   children: [
-//                     _label('Patient Name'),
-//                     const SizedBox(height: 8),
-//                     TextFormField(
-//                       controller: _patientCtrl,
-//                       decoration: _inputDecoration(border, hint: 'John Doe'),
-//                       validator: (v) =>
-//                           (v == null || v.trim().isEmpty) ? 'Required' : null,
-//                     ),
-//                     const SizedBox(height: 16),
-
-//                     _label('Doctor Name'),
-//                     const SizedBox(height: 8),
-//                     TextFormField(
-//                       controller: _doctorCtrl,
-//                       decoration: _inputDecoration(border, hint: 'Dr. Smith'),
-//                       validator: (v) =>
-//                           (v == null || v.trim().isEmpty) ? 'Required' : null,
-//                     ),
-//                     const SizedBox(height: 16),
-
-//                     _label('Country'),
-//                     const SizedBox(height: 8),
-//                     TextFormField(
-//                       controller: _countryCtrl,
-//                       textCapitalization: TextCapitalization.words,
-//                       decoration: _inputDecoration(border, hint: 'Australia'),
-//                       validator: (v) =>
-//                           (v == null || v.trim().isEmpty) ? 'Required' : null,
-//                     ),
-//                     const SizedBox(height: 16),
-
-//                     _label('Appointment Date'),
-//                     const SizedBox(height: 8),
-//                     InkWell(
-//                       onTap: _pickDate,
-//                       borderRadius: BorderRadius.circular(10),
-//                       child: InputDecorator(
-//                         decoration: _inputDecoration(border),
-//                         child: Row(
-//                           children: [
-//                             Icon(Icons.calendar_month, color: Colors.black54),
-//                             const SizedBox(width: 8),
-//                             Text(
-//                               _selectedDate == null
-//                                   ? 'Pick a date (> today)'
-//                                   : _fmtDate(_selectedDate!),
-//                               style: TextStyle(
-//                                 color: _selectedDate == null
-//                                     ? Colors.black45
-//                                     : Colors.black87,
-//                               ),
-//                             ),
-//                           ],
-//                         ),
-//                       ),
-//                     ),
-//                     const SizedBox(height: 16),
-
-//                     _label('Notes'),
-//                     const SizedBox(height: 8),
-//                     TextFormField(
-//                       controller: _notesCtrl,
-//                       maxLines: 4,
-//                       decoration: _inputDecoration(border, hint: 'Any notes…'),
-//                     ),
-//                     const SizedBox(height: 24),
-
-//                     SizedBox(
-//                       width: double.infinity,
-//                       child: FilledButton(
-//                         style: FilledButton.styleFrom(
-//                           backgroundColor: kAccent,
-//                           padding: const EdgeInsets.symmetric(vertical: 16),
-//                           shape: RoundedRectangleBorder(
-//                             borderRadius: BorderRadius.circular(14),
-//                           ),
-//                         ),
-//                         onPressed: _save,
-//                         child: const Text(
-//                           'Save Appointment',
-//                           style: TextStyle(
-//                             fontSize: 18, fontWeight: FontWeight.w700, color: Colors.white),
-//                         ),
-//                       ),
-//                     ),
-//                   ],
-//                 ),
-//               ),
-//             ],
-//           ),
-//         ),
-//       ),
-//     );
-//   }
-
-//   String _fmtDate(DateTime d) =>
-//       '${d.year.toString().padLeft(4, '0')}-${d.month.toString().padLeft(2, '0')}-${d.day.toString().padLeft(2, '0')}';
-
-//   Widget _label(String s) => Text(
-//         s,
-//         style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
-//       );
-
-//   InputDecoration _inputDecoration(OutlineInputBorder border, {String? hint}) {
-//     return InputDecoration(
-//       isDense: true,
-//       filled: true,
-//       fillColor: kFill,
-//       contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 16),
-//       enabledBorder: border,
-//       focusedBorder: border,
-//       hintText: hint,
-//     );
-//   }
-// }
